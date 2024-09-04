@@ -22,8 +22,19 @@ import {
   useParams
 } from 'react-router-dom';
 
+import { useEffect } from 'react';
+
+import {
+  RootState,
+  AppDispatch,
+  useDispatch,
+  useSelector
+} from '../../services/store';
+
 import { AppHeader, OrderInfo, Modal, IngredientDetails } from '@components';
 import { OnlyAuth, OnlyUnAuth } from '../routes/protected-route';
+
+import { fetchIngredients } from '../../slices/ingredients-slice';
 
 function App() {
   const location = useLocation();
@@ -31,7 +42,13 @@ function App() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const onClose = () => navigate(-1);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>

@@ -38,7 +38,7 @@ import { fetchIngredients } from '../../slices/ingredients-slice';
 
 function App() {
   const location = useLocation();
-  const backgroundLocation = location.state?.backgroundLocation;
+  const background = location.state?.from?.background || null;
 
   const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={backgroundLocation || location}>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed'>
           <Route index element={<Feed />} />
@@ -87,7 +87,7 @@ function App() {
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
       </Routes>
 
-      {backgroundLocation && (
+      {background && (
         <Routes>
           <Route
             path='/feed/:number'

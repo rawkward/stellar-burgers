@@ -35,6 +35,7 @@ import { AppHeader, OrderInfo, Modal, IngredientDetails } from '@components';
 import { OnlyAuth, OnlyUnAuth } from '../routes/protected-route';
 
 import { fetchIngredients } from '../../slices/ingredients-slice';
+import { fetchFeeds } from '../../slices/feed-slice';
 
 function App() {
   const location = useLocation();
@@ -48,6 +49,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch(fetchFeeds());
   }, [dispatch]);
 
   return (

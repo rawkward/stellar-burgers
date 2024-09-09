@@ -10,7 +10,7 @@ import {
   removeFromConstructor,
   resetConstructor,
   reorderConstructor
-} from '../../slices/burger-slice';
+} from '../../services/slices/burger-slice';
 import { TIngredient } from '@utils-types';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(

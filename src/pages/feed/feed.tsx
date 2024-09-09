@@ -8,18 +8,26 @@ import {
   selectIsLoading,
   selectTotal,
   selectTotalToday,
-  selectFeed
-} from '../../slices/feed-slice';
+  selectFeed,
+  fetchFeeds
+} from '../../services/slices/feed-slice';
 
 import { useSelector } from '../../services/store';
+import { useDispatch } from '../../services/store';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
+  /** TODO: DONE взять переменную из стора */
   const orders: TOrder[] = useSelector(selectOrders);
+
+  const dispatch = useDispatch();
+
+  const handleGetFeeds = () => {
+    dispatch(fetchFeeds());
+  };
 
   if (!orders.length) {
     return <Preloader />;
   }
 
-  <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
 };

@@ -118,6 +118,19 @@ export const orderBurgerApi = (data: string[]) =>
     if (data?.success) return data;
     return Promise.reject(data);
   });
+// .catch(() => ({
+//   order: {
+//     _id: 'asd',
+//     status: 'string',
+//     name: 'string',
+//     createdAt: 'string',
+//     updatedAt: 'string',
+//     number: 1,
+//     ingredients: []
+//   },
+//   name: 'as',
+//   success: true
+// }));
 
 type TOrderResponse = TServerResponse<{
   orders: TOrder[];

@@ -34,12 +34,16 @@ import {
 import { AppHeader, OrderInfo, Modal, IngredientDetails } from '@components';
 import { OnlyAuth, OnlyUnAuth } from '../routes/protected-route';
 
-import { fetchIngredients } from '../../slices/ingredients-slice';
-import { fetchFeeds } from '../../slices/feed-slice';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import { fetchFeeds } from '../../services/slices/feed-slice';
 
 function App() {
   const location = useLocation();
-  const background = location.state?.from?.background || null;
+  //const background = location.state?.from?.background || null;
+  let state = location.state as { background?: Location };
+  console.log('backgroundLocation', state);
+  console.log('location', location);
+  console.log('state', state);
 
   const navigate = useNavigate();
 
@@ -55,9 +59,9 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
+      <Routes location={state?.background || location}>
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/feed'>
+        <Route path='/feed' element={<Feed />}>
           <Route index element={<Feed />} />
           <Route path=':number' element={<OrderInfo />} />
         </Route>
@@ -89,7 +93,7 @@ function App() {
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
       </Routes>
 
-      {background && (
+      {state?.background && (
         <Routes>
           <Route
             path='/feed/:number'
@@ -102,7 +106,7 @@ function App() {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='ingredientsId' onClose={onClose}>
+              <Modal title='Детали ингредиента' onClose={onClose}>
                 <IngredientDetails />
               </Modal>
             }

@@ -9,7 +9,7 @@ import {
   selectTotal,
   selectTotalToday,
   selectFeed
-} from '../../slices/feed-slice';
+} from '../../services/slices/feed-slice';
 
 import { useSelector } from '../../services/store';
 

@@ -6,7 +6,7 @@ import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC } from 'react';
-import { selectIsLoading } from '../../slices/ingredients-slice';
+import { selectIsLoading } from '../../services/slices/ingredients-slice';
 
 export const ConstructorPage: FC = () => {
   /** TODO: DONE взять переменную из стора */

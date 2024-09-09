@@ -5,7 +5,7 @@ import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 
 import { useSelector } from '../../services/store';
-import { selectIngredients } from '../../slices/ingredients-slice';
+import { selectIngredients } from '../../services/slices/ingredients-slice';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: DONE взять переменные из стора */

@@ -39,11 +39,8 @@ import { fetchFeeds } from '../../services/slices/feed-slice';
 
 function App() {
   const location = useLocation();
-  //const background = location.state?.from?.background || null;
+
   let state = location.state as { background?: Location };
-  console.log('backgroundLocation', state);
-  console.log('location', location);
-  console.log('state', state);
 
   const navigate = useNavigate();
 
@@ -98,7 +95,7 @@ function App() {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='feedNumber' onClose={onClose}>
+              <Modal title='Детали заказа' onClose={onClose}>
                 <OrderInfo />
               </Modal>
             }
@@ -114,7 +111,7 @@ function App() {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='profileOrdersNumber' onClose={onClose}>
+              <Modal title='Детали заказа' onClose={onClose}>
                 <OrderInfo />
               </Modal>
             }

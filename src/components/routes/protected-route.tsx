@@ -1,8 +1,8 @@
 import React from 'react';
-import { useSelector } from 'src/services/store.js';
-//import {getIsAuthChecked, getUser} from "../services/auth/slice.ts";
+import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '@ui';
+import { selectAuthCheck, selectUser } from '../../services/slices/user-slice';
 
 type TProtectedProps = {
   onlyUnAuth?: boolean;
@@ -13,8 +13,8 @@ const Protected = ({
   onlyUnAuth = false,
   component
 }: TProtectedProps): React.JSX.Element => {
-  const isAuthChecked = true; //useSelector(getIsAuthChecked);
-  const user = 0; //useSelector(getUser);
+  const isAuthChecked = useSelector(selectAuthCheck);
+  const user = useSelector(selectUser);
   const location = useLocation();
 
   if (!isAuthChecked) {

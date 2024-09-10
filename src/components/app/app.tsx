@@ -36,6 +36,7 @@ import { OnlyAuth, OnlyUnAuth } from '../routes/protected-route';
 
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import { fetchFeeds } from '../../services/slices/feed-slice';
+import { getUserThunk, selectUser } from '../../services/slices/user-slice';
 
 function App() {
   const location = useLocation();
@@ -48,9 +49,13 @@ function App() {
 
   const onClose = () => navigate(-1);
 
+  const user = useSelector(selectUser);
+  console.log('user', user);
+
   useEffect(() => {
     dispatch(fetchIngredients());
     dispatch(fetchFeeds());
+    dispatch(getUserThunk());
   }, [dispatch]);
 
   return (
@@ -58,7 +63,7 @@ function App() {
       <AppHeader />
       <Routes location={state?.background || location}>
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/feed' element={<Feed />}>
+        <Route path='/feed'>
           <Route index element={<Feed />} />
           <Route path=':number' element={<OrderInfo />} />
         </Route>

@@ -1,12 +1,18 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 
+import { useSelector } from '../../services/store';
+import { selectUser } from '../../services/slices/user-slice';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+  /** TODO: DONE взять переменную из стора */
+  const user = useSelector(selectUser);
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to='/login' state={{ from: location }} />;
+  }
 
   const [formValue, setFormValue] = useState({
     name: user.name,

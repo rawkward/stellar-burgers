@@ -16,7 +16,7 @@ const initialState: OrderState = {
 
 export const orderBurger = createAsyncThunk(
   'order/orderBurger',
-  async (ingredients: string[]) => orderBurgerApi(ingredients)
+  async (ingredients: string[]) => await orderBurgerApi(ingredients)
 );
 
 const orderSlice = createSlice({
@@ -25,6 +25,9 @@ const orderSlice = createSlice({
   reducers: {
     clearOrderModalData: (state) => {
       state.data = null;
+    },
+    placeOrder: (state, action) => {
+      state.data = action.payload;
     }
   },
   selectors: {

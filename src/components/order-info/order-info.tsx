@@ -9,7 +9,7 @@ import { selectOrders } from '../../services/slices/feed-slice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
+  /** TODO: DONE взять переменные orderData и ingredients из стора */
 
   const { number } = useParams<{ number: string }>();
 
@@ -18,7 +18,6 @@ export const OrderInfo: FC = () => {
   const orders = useSelector(selectOrders);
 
   const orderData = orders.find((elem) => elem.number === orderNumber);
-  console.log('orderData', orderData);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients);
 

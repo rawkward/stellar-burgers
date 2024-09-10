@@ -11,7 +11,8 @@ import { useState } from 'react';
 import {
   selectBun,
   selectIngredients,
-  selectAll
+  selectAll,
+  resetConstructor
 } from '../../services/slices/burger-slice';
 
 import {
@@ -21,25 +22,28 @@ import {
 } from '../../services/slices/order-slice';
 
 import { clearOrderModalData } from '../../services/slices/order-slice';
+import { selectUser } from '../../services/slices/user-slice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: DONE взять переменные constructorItems, orderRequest и orderModalData из стора */
 
-  // const constructorItems = {
-  //   bun: {
-  //     price: 0
-  //   },
-  //   ingredients: []
-  // };
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const user = useSelector(selectUser);
 
   const constructorItems = useSelector(selectAll);
 
-  const ingredientsIds: string[] = [
-    constructorItems.bun && constructorItems.bun.id,
-    ...constructorItems.ingredients.map((ingredient) => ingredient.id)
-  ].filter((id): id is string => !!id);
+  const constructorBunId = constructorItems.bun?._id;
+  console.log('bunID', constructorBunId);
+
+  const constructorIngredientsIds = constructorItems.ingredients.map(
+    (ingredient) => ingredient._id
+  );
+
+  if (constructorBunId) {
+    constructorIngredientsIds.push(constructorBunId);
+  }
 
   const orderRequest = useSelector(selectOrderRequest);
 
@@ -48,11 +52,16 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
 
-    dispatch(orderBurger(ingredientsIds));
+    if (!user) {
+      return navigate('/login');
+    }
+
+    dispatch(orderBurger(constructorIngredientsIds));
   };
 
   const closeOrderModal = () => {
     dispatch(clearOrderModalData());
+    dispatch(resetConstructor());
   };
 
   const price = useMemo(

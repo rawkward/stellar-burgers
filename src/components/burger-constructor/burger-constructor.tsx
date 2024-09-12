@@ -23,6 +23,7 @@ import {
 
 import { clearOrderModalData } from '../../services/slices/order-slice';
 import { selectUser } from '../../services/slices/user-slice';
+import { addOrder } from '../../services/slices/orders-slice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: DONE взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -33,6 +34,8 @@ export const BurgerConstructor: FC = () => {
   const user = useSelector(selectUser);
 
   const constructorItems = useSelector(selectAll);
+  const orderRequest = useSelector(selectOrderRequest);
+  const orderModalData = useSelector(selectOrderModalData);
 
   const constructorBunId = constructorItems.bun?._id;
 
@@ -44,10 +47,6 @@ export const BurgerConstructor: FC = () => {
     constructorIngredientsIds.push(constructorBunId);
   }
 
-  const orderRequest = useSelector(selectOrderRequest);
-
-  const orderModalData = useSelector(selectOrderModalData);
-
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
 
@@ -56,6 +55,8 @@ export const BurgerConstructor: FC = () => {
     }
 
     dispatch(orderBurger(constructorIngredientsIds));
+
+    if (orderModalData) dispatch(addOrder(orderModalData));
   };
 
   const closeOrderModal = () => {

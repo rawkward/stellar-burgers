@@ -24,15 +24,6 @@ export const registerUserThunk = createAsyncThunk(
     })
 );
 
-// export const loginUserThunk = createAsyncThunk(
-//   'users/loginUser',
-//   async (data: TLoginData) =>
-//     loginUserApi(data).then((res) => {
-//       setCookie('accessToken', res.refreshToken);
-//       return res.user;
-//     })
-// );
-
 export const loginUserThunk = createAsyncThunk(
   'user/loginUser',
   async ({ email, password }: Omit<TRegisterData, 'name'>) => {

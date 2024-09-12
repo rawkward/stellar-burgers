@@ -4,7 +4,6 @@ import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { selectUser, updateUserThunk } from '../../services/slices/user-slice';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { getCookie } from '../../utils/cookie';
 
 export const Profile: FC = () => {
   /** TODO: DONE взять переменную из стора */
@@ -38,7 +37,6 @@ export const Profile: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const accessToken = getCookie('accessToken');
     dispatch(updateUserThunk(formValue));
   };
 

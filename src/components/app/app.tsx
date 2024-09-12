@@ -36,7 +36,13 @@ import { OnlyAuth, OnlyUnAuth } from '../routes/protected-route';
 
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
 import { fetchFeeds } from '../../services/slices/feed-slice';
-import { getUserThunk, selectUser } from '../../services/slices/user-slice';
+import {
+  getUserThunk,
+  selectUser,
+  checkUserAuth,
+  selectAuthCheck,
+  setAuthCheck
+} from '../../services/slices/user-slice';
 
 function App() {
   const location = useLocation();
@@ -44,18 +50,31 @@ function App() {
   let state = location.state as { background?: Location };
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const onClose = () => navigate(-1);
 
   const user = useSelector(selectUser);
 
+  const authChecked = useSelector(selectAuthCheck);
+
+  useEffect(() => {
+    dispatch(getUserThunk());
+  }, []);
+
   useEffect(() => {
     dispatch(fetchIngredients());
     dispatch(fetchFeeds());
-    dispatch(getUserThunk());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(checkUserAuth())
+      .unwrap()
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => dispatch(setAuthCheck(true)));
+  }, [authChecked]);
 
   return (
     <div className={styles.app}>

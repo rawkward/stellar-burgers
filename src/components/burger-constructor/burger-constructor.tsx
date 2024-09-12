@@ -35,7 +35,6 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(selectAll);
 
   const constructorBunId = constructorItems.bun?._id;
-  console.log('bunID', constructorBunId);
 
   const constructorIngredientsIds = constructorItems.ingredients.map(
     (ingredient) => ingredient._id

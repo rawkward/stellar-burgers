@@ -7,7 +7,7 @@ import {
   Logo,
   ProfileIcon
 } from '@zlden/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
   <header className={styles.header}>
@@ -15,17 +15,27 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
       <div className={styles.menu_part_left}>
         <>
           <BurgerIcon type={'primary'} />
-          <Link to='/'>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.link_active : styles.link
+            }
+            to='/'
+          >
             <p className='text text_type_main-default ml-2 mr-10'>
               Конструктор
             </p>
-          </Link>
+          </NavLink>
         </>
         <>
           <ListIcon type={'primary'} />
-          <Link to='/feed'>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.link_active : styles.link
+            }
+            to='/feed'
+          >
             <p className='text text_type_main-default ml-2'>Лента заказов</p>
-          </Link>
+          </NavLink>
         </>
       </div>
       <div className={styles.logo}>
@@ -33,11 +43,16 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
       </div>
       <div className={styles.link_position_last}>
         <ProfileIcon type={'primary'} />
-        <Link to='/profile'>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? styles.link_active : styles.link
+          }
+          to='/profile'
+        >
           <p className='text text_type_main-default ml-2'>
             {userName || 'Личный кабинет'}
           </p>
-        </Link>
+        </NavLink>
       </div>
     </nav>
   </header>

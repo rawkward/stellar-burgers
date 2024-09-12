@@ -50,7 +50,6 @@ function App() {
   const onClose = () => navigate(-1);
 
   const user = useSelector(selectUser);
-  console.log('user', user);
 
   useEffect(() => {
     dispatch(fetchIngredients());

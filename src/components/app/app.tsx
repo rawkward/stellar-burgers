@@ -60,9 +60,6 @@ function App() {
 
   useEffect(() => {
     dispatch(getUserThunk());
-  }, []);
-
-  useEffect(() => {
     dispatch(fetchIngredients());
     dispatch(fetchFeeds());
   }, [dispatch]);

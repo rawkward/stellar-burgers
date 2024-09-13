@@ -12,7 +12,7 @@ import {
   refreshToken
 } from '@api';
 import { TUser } from '@utils-types';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 export const registerUserThunk = createAsyncThunk(
   'users/registerUser',
@@ -75,7 +75,12 @@ export const updateUserThunk = createAsyncThunk(
   async (user: Partial<TRegisterData>) => await updateUserApi(user)
 );
 
-export const logoutThunk = createAsyncThunk('users/logout', () => logoutApi());
+export const logoutThunk = createAsyncThunk('users/logout', () =>
+  logoutApi().then(() => {
+    localStorage.clear();
+    deleteCookie('accessToken');
+  })
+);
 
 export interface UserState {
   isAuthChecked: boolean;

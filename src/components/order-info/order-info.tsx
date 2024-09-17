@@ -8,34 +8,21 @@ import { selectIngredients } from '../../services/slices/ingredients-slice';
 import { selectOrders } from '../../services/slices/feed-slice';
 import { useParams } from 'react-router-dom';
 import { selectOrderModalData } from '../../services/slices/order-slice';
-import { fetchOrderByNumberThunk } from '../../services/slices/orders-slice';
+import { fetchOrderByNumberThunk } from '../../services/slices/order-slice';
+import { ordersInfoDataSelector } from '@selectors';
 
 export const OrderInfo: FC = () => {
-  /** TODO: DONE взять переменные orderData и ingredients из стора */
-
-  const [orderData, setOrderData] = useState<TOrder | null>(null);
   const ingredients: TIngredient[] = useSelector(selectIngredients);
   const params = useParams();
-  const id = Number(params.number);
+  const id = params.number;
 
-  const dispatch = useDispatch();
-  const orders = useSelector(selectOrders);
-  const orderModal = useSelector(selectOrderModalData);
+  const orderData = useSelector(ordersInfoDataSelector(id || ''));
 
   useEffect(() => {
-    const order = orders.find((order) => order.number === id);
-    if (order) {
-      setOrderData(order);
-    } else if (id && !orders.some((order) => order.number === id)) {
-      dispatch(fetchOrderByNumberThunk(id));
+    if (!orderData) {
+      fetchOrderByNumberThunk(Number(id));
     }
-  }, [orders, id, dispatch]);
-
-  useEffect(() => {
-    if (id && orderModal) {
-      setOrderData(orderModal);
-    }
-  }, [orderModal, id]);
+  }, [orderData, id]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

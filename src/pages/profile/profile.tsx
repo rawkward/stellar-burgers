@@ -1,12 +1,19 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 
+import { useSelector, useDispatch } from '../../services/store';
+import { selectUser, updateUserThunk } from '../../services/slices/user-slice';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+  /** TODO: DONE взять переменную из стора */
+  const user = useSelector(selectUser);
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  if (!user) {
+    return <Navigate to='/login' state={{ from: location }} />;
+  }
 
   const [formValue, setFormValue] = useState({
     name: user.name,
@@ -29,6 +36,8 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+
+    dispatch(updateUserThunk(formValue));
   };
 
   const handleCancel = (e: SyntheticEvent) => {
@@ -56,6 +65,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };

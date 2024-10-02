@@ -16,7 +16,6 @@ import { useSelector } from '../../services/store';
 import { useDispatch } from '../../services/store';
 
 export const Feed: FC = () => {
-  /** TODO: DONE взять переменную из стора */
   const orders: TOrder[] = useSelector(selectOrders);
 
   const dispatch = useDispatch();

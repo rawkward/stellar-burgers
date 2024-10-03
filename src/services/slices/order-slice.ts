@@ -9,7 +9,7 @@ interface OrderState {
   orderByNumber: TOrder | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   success: true,
   isLoading: false,
   data: null,

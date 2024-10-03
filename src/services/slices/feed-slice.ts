@@ -11,7 +11,7 @@ interface FeedState {
   totalToday: number;
 }
 
-const initialState: FeedState = {
+export const initialState: FeedState = {
   success: true,
   isLoading: false,
   orders: [],

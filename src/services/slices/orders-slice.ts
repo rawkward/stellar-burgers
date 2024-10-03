@@ -8,7 +8,7 @@ interface OrdersState {
   orders: TOrder[];
 }
 
-const initialState: OrdersState = {
+export const initialState: OrdersState = {
   success: true,
   isLoading: false,
   orders: []

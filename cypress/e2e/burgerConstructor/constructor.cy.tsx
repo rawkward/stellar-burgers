@@ -1,28 +1,23 @@
 describe('Burger constructor testing', () => {
   beforeEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+
     cy.fixture('ingredients.json').as('ingredientsData');
     cy.fixture('user.json').as('userData');
     cy.fixture('order.json').as('orderData');
+    cy.fixture('orders.json').as('ordersData');
 
-    localStorage.setItem('refreshToken', 'mockRefreshToken');
+    cy.window().then((win) => {
+      win.localStorage.setItem('refreshToken', 'mockRefreshToken');
+    });
     cy.setCookie('accessToken', 'mockAccessToken');
 
     cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' }).as(
       'getIngredients'
     );
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/auth/user',
-        headers: {
-          Cookie: 'accessToken=mockAccessToken'
-        }
-      },
-      {
-        fixture: 'user.json'
-      }
-    ).as('getUser');
+    cy.intercept('GET', '/api/auth/user', { fixture: 'user.json' }).as('getUser');
 
     cy.intercept('POST', '/auth/token', (req) => {
       req.reply({
@@ -32,7 +27,8 @@ describe('Burger constructor testing', () => {
       });
     }).as('postToken');
 
-    cy.intercept('POST', '/orders', { fixture: 'order.json' }).as('postOrder');
+    cy.intercept('POST', '/api/orders', { fixture: 'order.json' }).as('postOrder');
+    cy.intercept('GET', '/api/orders', { fixture: 'orders.json' }).as('getOrders');
   });
 
   it('All ingredients should be displayed', () => {
@@ -83,5 +79,23 @@ describe('Burger constructor testing', () => {
     cy.get(`[data-cy='modal']`).should('not.exist');
   });
 
-  it('Order should be created', () => {});
+  it('Order should be created', () => {
+    cy.visit('/');
+    cy.wait('@getIngredients');
+
+    cy.get(`[data-cy='ingredients-buns']`).contains('Добавить').click();
+    cy.get(`[data-cy='ingredients-mains']`).contains('Добавить').click();
+
+    cy.get(`[data-cy='order-btn']`).contains('Оформить заказ').click();
+
+    cy.wait(1000);
+    cy.get(`[data-cy='modal']`).should('contain', '54874');
+    
+    cy.get(`[data-cy='close-icon']`).click();
+    cy.get(`[data-cy='modal']`).should('not.exist');
+
+    cy.get(`[data-cy='constructor-bun-top-empty']`).should('contain', 'Выберите булки');
+    cy.get(`[data-cy='constructor-filling-empty']`).should('contain', 'Выберите начинку');
+    cy.get(`[data-cy='constructor-bun-bottom-empty']`).should('contain', 'Выберите булки');
+  });
 });

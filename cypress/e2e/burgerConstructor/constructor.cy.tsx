@@ -70,6 +70,7 @@ describe('Burger constructor testing', () => {
 
     cy.get(`[data-cy='ingredient']`).first().click();
     cy.get(`[data-cy='modal']`).should('be.visible');
+    cy.get(`[data-cy='modal']`).should('contain', 'Краторная булка N-200i');
 
     cy.get(`[data-cy='close-icon']`).click();
     cy.get(`[data-cy='modal']`).should('not.exist');
@@ -98,4 +99,9 @@ describe('Burger constructor testing', () => {
     cy.get(`[data-cy='constructor-filling-empty']`).should('contain', 'Выберите начинку');
     cy.get(`[data-cy='constructor-bun-bottom-empty']`).should('contain', 'Выберите булки');
   });
+
+  after(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  })
 });

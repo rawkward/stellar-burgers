@@ -6,7 +6,7 @@ interface OrdersState {
   success: boolean;
   isLoading: boolean;
   orders: TOrder[];
-  error: string | null
+  error: string | null;
 }
 
 export const initialState: OrdersState = {

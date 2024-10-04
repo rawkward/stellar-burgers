@@ -41,8 +41,8 @@ describe('order reducer tests', () => {
         ],
         _id: '67003a6613a2b7001c8efe32',
         owner: {
-          name: 'pashka',
-          email: 'pashka@mail.ru',
+          name: 'test',
+          email: 'test@test.ru',
           createdAt: '2024-10-02T22:24:56.421Z',
           updatedAt: '2024-10-02T22:24:56.421Z'
         },

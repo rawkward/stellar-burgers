@@ -2,18 +2,20 @@ import { getOrderByNumberApi, orderBurgerApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
-interface OrderState {
+export interface OrderState {
   success: boolean;
   isLoading: boolean;
   data: TOrder | null;
   orderByNumber: TOrder | null;
+  error: string | null;
 }
 
 export const initialState: OrderState = {
   success: true,
   isLoading: false,
   data: null,
-  orderByNumber: null
+  orderByNumber: null,
+  error: null
 };
 
 export const orderBurger = createAsyncThunk(
@@ -51,9 +53,10 @@ const orderSlice = createSlice({
         state.success = action.payload.success;
         state.data = action.payload.order;
       })
-      .addCase(orderBurger.rejected, (state) => {
+      .addCase(orderBurger.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
+        state.error = action.error.message || 'Возникла ошибка!';
       })
 
       .addCase(fetchOrderByNumberThunk.pending, (state) => {
@@ -64,9 +67,10 @@ const orderSlice = createSlice({
         state.success = true;
         state.orderByNumber = action.payload.orders[0];
       })
-      .addCase(fetchOrderByNumberThunk.rejected, (state) => {
+      .addCase(fetchOrderByNumberThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
+        state.error = action.error.message || 'Возникла ошибка!';
       });
   }
 });

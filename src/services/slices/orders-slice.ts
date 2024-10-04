@@ -6,12 +6,14 @@ interface OrdersState {
   success: boolean;
   isLoading: boolean;
   orders: TOrder[];
+  error: string | null
 }
 
 export const initialState: OrdersState = {
   success: true,
   isLoading: false,
-  orders: []
+  orders: [],
+  error: null
 };
 
 export const fetchOrdersThunk = createAsyncThunk(
@@ -42,9 +44,10 @@ const ordersSlice = createSlice({
         state.success = true;
         state.orders = action.payload;
       })
-      .addCase(fetchOrdersThunk.rejected, (state) => {
+      .addCase(fetchOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
+        state.error = action.error.message || 'Возникла ошибка!';
       });
   }
 });

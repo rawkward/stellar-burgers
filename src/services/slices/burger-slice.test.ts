@@ -1,5 +1,4 @@
 import { TIngredient } from '@utils-types';
-import store from '../store';
 import {
   addToConstructor,
   removeFromConstructor,

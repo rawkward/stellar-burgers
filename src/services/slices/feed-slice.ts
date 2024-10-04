@@ -9,6 +9,7 @@ interface FeedState {
   orders: TOrder[];
   total: number;
   totalToday: number;
+  error: string | null;
 }
 
 export const initialState: FeedState = {
@@ -16,7 +17,8 @@ export const initialState: FeedState = {
   isLoading: false,
   orders: [],
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  error: null
 };
 
 export const fetchFeeds = createAsyncThunk('feed/fetchFeeds', async () =>
@@ -50,9 +52,10 @@ const feedSlice = createSlice({
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
       })
-      .addCase(fetchFeeds.rejected, (state) => {
+      .addCase(fetchFeeds.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
+        state.error = action.error.message || 'Возникла ошибка!';
       });
   }
 });

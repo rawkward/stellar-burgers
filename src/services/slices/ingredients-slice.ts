@@ -7,12 +7,14 @@ interface IngredientsState {
   success: boolean;
   isLoading: boolean;
   data: TIngredient[];
+  error: string | null;
 }
 
 export const initialState: IngredientsState = {
   success: true,
   isLoading: false,
-  data: []
+  data: [],
+  error: null
 };
 
 export const fetchIngredients = createAsyncThunk(
@@ -32,15 +34,18 @@ const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
         state.data = action.payload;
+        state.error = null;
       })
-      .addCase(fetchIngredients.rejected, (state) => {
+      .addCase(fetchIngredients.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
+        state.error = action.error.message || 'Возникла ошибка!';
       });
   }
 });

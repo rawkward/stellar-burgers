@@ -26,8 +26,6 @@ import { selectUser } from '../../services/slices/user-slice';
 import { addOrder } from '../../services/slices/orders-slice';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: DONE взять переменные constructorItems, orderRequest и orderModalData из стора */
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

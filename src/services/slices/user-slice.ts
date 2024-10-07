@@ -16,21 +16,29 @@ import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 export const registerUserThunk = createAsyncThunk(
   'users/registerUser',
-  async (data: TRegisterData) =>
-    registerUserApi(data).then((res) => {
-      setCookie('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      return res.user;
-    })
+  async (data: TRegisterData) => {
+    const res = await registerUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return {
+      user: res.user,
+      accessToken: res.accessToken,
+      refreshToken: res.refreshToken
+    };
+  }
 );
 
 export const loginUserThunk = createAsyncThunk(
   'user/loginUser',
   async ({ email, password }: Omit<TRegisterData, 'name'>) => {
-    const data = await loginUserApi({ email, password });
-    setCookie('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    return data.user;
+    const res = await loginUserApi({ email, password });
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return {
+      user: res.user,
+      accessToken: res.accessToken,
+      refreshToken: res.refreshToken
+    };
   }
 );
 
@@ -83,16 +91,22 @@ export const logoutThunk = createAsyncThunk('users/logout', () =>
 );
 
 export interface UserState {
+  success: boolean;
   isAuthChecked: boolean;
   isLoading: boolean;
   user: TUser | null;
+  accessToken: string;
+  refreshToken: string;
   error: string | null;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
+  success: true,
   isAuthChecked: false,
   isLoading: false,
   user: null,
+  accessToken: '',
+  refreshToken: '',
   error: null
 };
 
@@ -117,77 +131,117 @@ export const userSlice = createSlice({
     builder.addCase(registerUserThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(registerUserThunk.rejected, (state) => {
+    builder.addCase(registerUserThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(registerUserThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.user = action.payload;
+      state.success = true;
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     });
 
     builder.addCase(loginUserThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(loginUserThunk.rejected, (state) => {
+    builder.addCase(loginUserThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(loginUserThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.user = action.payload;
+      state.success = true;
+      state.user = action.payload.user;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     });
 
     builder.addCase(forgotPasswordThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(forgotPasswordThunk.rejected, (state) => {
+    builder.addCase(forgotPasswordThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(forgotPasswordThunk.fulfilled, (state) => {
       state.isLoading = false;
+      state.success = true;
     });
 
     builder.addCase(resetPasswordThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(resetPasswordThunk.rejected, (state) => {
+    builder.addCase(resetPasswordThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(resetPasswordThunk.fulfilled, (state) => {
       state.isLoading = false;
+      state.success = true;
     });
 
     builder.addCase(getUserThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getUserThunk.rejected, (state) => {
+    builder.addCase(getUserThunk.rejected, (state, action) => {
       state.isAuthChecked = true;
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(getUserThunk.fulfilled, (state) => {
       state.isAuthChecked = true;
       state.isLoading = false;
+      state.success = true;
     });
 
     builder.addCase(updateUserThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(updateUserThunk.rejected, (state) => {
+    builder.addCase(updateUserThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(updateUserThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       state.user = action.payload.user;
+      state.success = true;
     });
 
     builder.addCase(logoutThunk.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(logoutThunk.rejected, (state) => {
+    builder.addCase(logoutThunk.rejected, (state, action) => {
       state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
     });
     builder.addCase(logoutThunk.fulfilled, (state) => {
       state.isLoading = false;
       state.user = null;
+      state.success = true;
+    });
+
+    builder.addCase(checkUserAuth.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(checkUserAuth.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message || 'Возникла ошибка!';
+      state.success = false;
+      state.isAuthChecked = true;
+    });
+    builder.addCase(checkUserAuth.fulfilled, (state) => {
+      state.isLoading = false;
+      state.success = true;
+      state.isAuthChecked = true;
     });
   }
 });

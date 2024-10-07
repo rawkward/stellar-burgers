@@ -9,8 +9,7 @@ import { selectAll } from '../../services/slices/burger-slice';
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
->(({ title, titleRef, ingredients }, ref) => {
-  /** TODO: DONE взять переменную из стора */
+>(({ title, titleRef, ingredients, ...rest }, ref) => {
   const burgerConstructor = useSelector(selectAll);
 
   const ingredientsCounters = useMemo(() => {
@@ -31,6 +30,7 @@ export const IngredientsCategory = forwardRef<
       ingredients={ingredients}
       ingredientsCounters={ingredientsCounters}
       ref={ref}
+      {...rest}
     />
   );
 });

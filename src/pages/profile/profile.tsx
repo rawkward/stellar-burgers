@@ -6,7 +6,6 @@ import { selectUser, updateUserThunk } from '../../services/slices/user-slice';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 export const Profile: FC = () => {
-  /** TODO: DONE взять переменную из стора */
   const user = useSelector(selectUser);
   const location = useLocation();
   const dispatch = useDispatch();
